@@ -66,6 +66,9 @@ BEGIN_MESSAGE_MAP(CMFCStudy2Dlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BTN_Image, &CMFCStudy2Dlg::OnBnClickedBtnImage)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMFCStudy2Dlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMFCStudy2Dlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BTN_ACT, &CMFCStudy2Dlg::OnBnClickedBtnAct)
 END_MESSAGE_MAP()
 
 
@@ -163,18 +166,22 @@ void CMFCStudy2Dlg::OnBnClickedBtnImage()
 	int nHeight = 480;
 	//int nWidth = 32;
 	//int nHeight = 24;
+	//int nHeight = 4;
+	//int nWidth = 8;
 	int nBpp = 8;
 
 	//m_image.Create(640, 480, 8);
 
-	m_image.Create(nWidth, nHeight, nBpp);
+	//m_image.Create(nWidth, nHeight, nBpp);
+
+	m_image.Create(nWidth, -nHeight, nBpp);
 	if (nBpp == 8) {
 
 		static RGBQUAD rgb[256];
 		for (int i = 0; i < 256; i++) {
 			rgb[i].rgbRed = rgb[i].rgbGreen = rgb[i].rgbBlue = i;
 
-			m_image.SetColorTable(0, 256, rgb);
+		m_image.SetColorTable(0, 256, rgb);
 		}
 	}
 
@@ -182,33 +189,181 @@ void CMFCStudy2Dlg::OnBnClickedBtnImage()
 
 	unsigned char* fn = (unsigned char*)m_image.GetBits();
 
-	for (int j = 0; j < nHeight; j++) {
-		for (int i = 0; i < nWidth; i++) {
-			//fn[j * nPitch + i] = 128;
-			//fn[j * nPitch + i] = 255;
-			fn[j * nPitch + i] = j % 255;
-			//fn[j * nPitch + i] = (j*10) % 255;
+	memset(fn, 0xff, nWidth * nHeight);
 
-		}
-	}
+	//for (int j = 0; j < nHeight; j++) {
+	//	for (int i = 0; i < nWidth; i++) {
+	//		fn[j * nPitch + i] = (i % 0xff);
+	//	}
+	//}
+
+	//////for (int j = 0; j < nHeight; j++) {
+	//////	for (int i = 0; i < nWidth; i++) {
+	//////		//fn[j * nPitch + i] = 128;
+	//////		//fn[j * nPitch + i] = 255;
+	//////		//fn[j * nPitch + i] = j % 255;
+	//////		//fn[j * nPitch + i] = (j*60) % 255;
+	//////		fn[j * nPitch + i] = 0xff;
+
+	//////	}
+	//////}
 
 	//fn[12 * nPitch + 16] = 0;
 	/*fn[0 * nPitch + 0] = 128;
 	fn[0 * nPitch + 1] = 128;
 	fn[1 * nPitch + 1] = 128;*/
 
-	for (int j = 0; j < nHeight / 2; j++) {
-		for (int i = 0; i < nWidth / 2; i++) {
+	/*for (int j = 0; j < nHeight; j++) {
+		for (int i = 0; i < nWidth; i++) {
 			fn[j * nPitch + i] = 200;
+		}
+	}*/
+
+
+
+	//CClientDC dc(this);
+	//m_image.Draw(dc, 0, 0);
+	//m_image.Draw(dc, nWidth / 2, nHeight / 2);
+
+	UpdateDisplay();
+
+	m_image.Save(_T("C:\\Users\\wjgk0\\source\\repos\\first_MFC\\MFC_Study2\\Image\\save12.bmp"));
+
+
+
+}
+
+CString g_strFileImage = _T("C:\\Users\\wjgk0\\source\\repos\\first_MFC\\MFC_Study2\\Image\\save11.bmp");
+void CMFCStudy2Dlg::OnBnClickedButton2()
+{
+
+	m_image.Save(g_strFileImage);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CMFCStudy2Dlg::OnBnClickedButton3()
+{
+	if (m_image != NULL) {
+		m_image.Destroy();
+	}
+	m_image.Load(g_strFileImage);
+
+	UpdateDisplay();
+
+	//CClientDC dc(this);
+	//m_image.Draw(dc, 0, 0);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+void CMFCStudy2Dlg::UpdateDisplay()
+{
+	CClientDC dc(this);
+	m_image.Draw(dc, 0, 0);
+}
+
+
+void CMFCStudy2Dlg::moveRect()
+{
+	static int nSttx = 0;
+	static int nStty = 0;
+	int nGray = 30;
+	int nWidth = m_image.GetWidth();
+	int nHeight = m_image.GetHeight();
+	int nPitch = m_image.GetPitch();
+	unsigned char* fn = (unsigned char*)m_image.GetBits();
+
+	memset(fn, 0xff, nWidth*nHeight);
+
+	for (int j = nStty; j < nStty+48; j++) {
+		for (int i = nSttx; i < nSttx+64; i++) {
+			if(validImgPos(i,j))
+				fn[j * nPitch + i] = nGray;
 		}
 	}
 
-	CClientDC dc(this);
-	m_image.Draw(dc, 0, 0);
-	//m_image.Draw(dc, nWidth / 2, nHeight / 2);
+	nSttx++;
+	nStty++;
 
-	m_image.Save(_T("C:\\Users\\wjgk0\\source\\repos\\first_MFC\\MFC_Study2\\Image\\save8.bmp"));
+	UpdateDisplay();
+
+}
+
+void CMFCStudy2Dlg::OnBnClickedBtnAct()
+{
+
+	for (int i = 0; i < 100; i++) {
+		//moveRect();
+		moveElipse();
+
+		Sleep(10);
+
+	}
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+BOOL CMFCStudy2Dlg::validImgPos(int x, int y) {
+
+	//BOOL bRet = false;
+
+	int nWidth = m_image.GetWidth();
+	int nHeight = m_image.GetHeight();
+	CRect rect(0, 0, nWidth, nHeight);
+
+	return rect.PtInRect(CPoint(x, y));
 
 
 
+	/*if (x > 0 && x <= nWidth) {
+
+		bRet=true;
+
+	}
+
+	if (y > 0 && y <= nHeight) {
+		bRet = true;
+	}
+
+	return bRet;*/
+
+}
+
+BOOL CMFCStudy2Dlg::isInsideEllipse(int x, int y, int centerX, int centerY, int radiusX, int radiusY)
+{
+	double dx = (x - centerX) / static_cast<double>(radiusX);
+	double dy = (y - centerY) / static_cast<double>(radiusY);
+	return (dx * dx + dy * dy <= 1.0);
+}
+
+
+void CMFCStudy2Dlg::moveElipse()
+{
+	static int nSttx = 0;
+	static int nStty = 0;
+	int nGray = 50;
+	int nWidth = m_image.GetWidth();
+	int nHeight = m_image.GetHeight();
+	int nPitch = m_image.GetPitch();
+	unsigned char* fn = (unsigned char*)m_image.GetBits();
+
+	// Clear the image with a white background
+	memset(fn, 0xff, nWidth * nHeight);
+
+	// Draw a gray ellipse at the specified position
+	for (int j = nStty; j < nStty + 48; j++) {
+		for (int i = nSttx; i < nSttx + 64; i++) {
+			if (validImgPos(i, j)) {
+				// Check if the point is inside the ellipse
+				if (isInsideEllipse(i, j, nSttx + 32, nStty + 24, 32, 24)) {
+					fn[j * nPitch + i] = nGray;
+				}
+			}
+		}
+	}
+
+	// Move the ellipse
+	nSttx++;
+	nStty++;
+
+	UpdateDisplay();
 }

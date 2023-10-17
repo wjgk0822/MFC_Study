@@ -11,6 +11,8 @@ class CMFCStudy2Dlg : public CDialogEx
 
 private:
 	CImage m_image;
+	BOOL validImgPos(int x,int y);
+	BOOL isInsideEllipse(int x, int y, int centerX, int centerY, int radiusX, int radiusY);
 // 생성입니다.
 public:
 	CMFCStudy2Dlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
@@ -36,4 +38,10 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedBtnImage();
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedButton3();
+	void UpdateDisplay();
+	void moveRect();
+	afx_msg void OnBnClickedBtnAct();
+	void moveElipse();
 };

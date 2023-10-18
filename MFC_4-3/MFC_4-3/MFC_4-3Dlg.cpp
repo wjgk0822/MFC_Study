@@ -236,28 +236,33 @@ void CMFC43Dlg::OnBnClickedButton2()
 	int nHeight = m_pDlgImage->m_image.GetHeight();
 	int nPitch = m_pDlgImage->m_image.GetPitch();
 
-	memset(fn, 0xff, nWidth * nHeight);
+	//memset(fn, 0xff, nWidth * nHeight);
+	memset(fn, 0, nWidth * nHeight);
 
 	//memset(fn, 0, 640 * 480);
 	//memset(fn, 0, 320 * 240);
-	for (int k = 0; k < 100; k++) {
+	for (int k = 0; k < MAX_POINT; k++) {
 
 		int x = rand() % nWidth;
 		int y = rand() % nHeight;
 
 
-		fn[y * nPitch + x] = 0;
+		fn[y * nPitch + x] =rand()%0xff;
 
 	}
 
 	int nIndex = 0;
+	int nTh = 100;
 
 	for (int j = 0; j < nHeight; j++) {
 		for (int i = 0; i < nWidth; i++) {
-			if (fn[j * nPitch + i] == 0) {
-				if (m_pDlgImageResult->m_nDataCount <= 100) {
+			if (/*fn[j * nPitch + i] != 0*/
+				fn[j * nPitch + i] > nTh) {
+				if (m_pDlgImageResult->m_nDataCount < MAX_POINT) {
 
-					//cout << nSum << ":" << i << "," << j << endl;
+					//cout << nIndex << endl;
+
+					//cout << nIndex << ":" << i << "," << j << endl;
 
 					//nSum++;
 

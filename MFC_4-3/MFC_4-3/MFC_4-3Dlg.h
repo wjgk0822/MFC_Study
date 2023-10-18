@@ -3,6 +3,7 @@
 //
 
 #include "CDlgImage.h"
+//#include <iostream>
 #pragma once
 
 
@@ -14,6 +15,7 @@ public:
 	CMFC43Dlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
 
 	CDlgImage* m_pDlgImage;
+	CDlgImage* m_pDlgImageResult;
 
 
 // 대화 상자 데이터입니다.
@@ -40,4 +42,5 @@ public:
 	afx_msg void OnDestroy();
 
 	void callFunc(int n);
+	afx_msg void OnBnClickedButton2();
 };

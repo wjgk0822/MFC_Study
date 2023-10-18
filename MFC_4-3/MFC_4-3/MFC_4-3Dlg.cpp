@@ -7,6 +7,7 @@
 #include "MFC_4-3.h"
 #include "MFC_4-3Dlg.h"
 #include "afxdialogex.h"
+#include <iostream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,6 +18,7 @@
 
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
+using namespace std;
 
 class CAboutDlg : public CDialogEx
 {
@@ -34,6 +36,8 @@ public:
 // 구현입니다.
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+//	virtual BOOL OnInitDialog();
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -70,6 +74,7 @@ BEGIN_MESSAGE_MAP(CMFC43Dlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFC43Dlg::OnBnClickedButton1)
 	ON_WM_DESTROY()
+	ON_BN_CLICKED(IDC_BUTTON2, &CMFC43Dlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -106,9 +111,19 @@ BOOL CMFC43Dlg::OnInitDialog()
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 
+	MoveWindow(0,0,1280,800);
+
 	m_pDlgImage = new CDlgImage;
 	m_pDlgImage->Create(IDD_CDlgImage,this);
 	m_pDlgImage->ShowWindow(SW_SHOW);
+	m_pDlgImage->MoveWindow(0, 0, 640, 480);
+
+	m_pDlgImageResult = new CDlgImage;
+	m_pDlgImageResult->Create(IDD_CDlgImage, this);
+	m_pDlgImageResult->ShowWindow(SW_SHOW);
+	m_pDlgImageResult->MoveWindow(640, 0, 640, 480);
+
+
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -170,7 +185,10 @@ void CMFC43Dlg::OnBnClickedButton1()
 	/*CDlgImage dlg;
 	dlg.DoModal();*/
 
-	m_pDlgImage->ShowWindow(SW_SHOW);
+	//m_pDlgImage->ShowWindow(SW_SHOW);
+	unsigned char* fn = (unsigned char*)m_pDlgImage->m_image.GetBits();
+
+	memset(fn, 0, 640 * 480);
 
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
@@ -186,12 +204,65 @@ void CMFC43Dlg::OnDestroy()
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 }
 
-#include <iostream>
+//#include <iostream>
 void CMFC43Dlg::callFunc(int n)
 {
 
 	//int nData = n;
-	std::cout << n << std::endl;
+	cout << n << endl;
 
 
+}
+
+
+//BOOL CAboutDlg::OnInitDialog()
+//{
+//	CDialogEx::OnInitDialog();
+//
+	// TODO:  여기에 추가 초기화 작업을 추가합니다.
+
+//	return TRUE;  // return TRUE unless you set the focus to a control
+	// 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
+//}
+
+
+void CMFC43Dlg::OnBnClickedButton2()
+{
+
+	unsigned char* fn = (unsigned char*)m_pDlgImage->m_image.GetBits();
+
+	int nWidth = m_pDlgImage->m_image.GetWidth();
+	int nHeight = m_pDlgImage->m_image.GetHeight();
+	int nPitch = m_pDlgImage->m_image.GetPitch();
+
+	//memset(fn, 0, 640 * 480);
+	//memset(fn, 0, 320 * 240);
+	for (int k = 0; k < 100; k++) {
+
+		int x = rand() % nWidth;
+		int y = rand() % nHeight;
+
+
+		fn[y * nPitch + x] = 0;
+
+	}
+
+	int nSum = 0;
+
+	for (int j = 0; j < nHeight; j++) {
+		for (int i = 0; i < nWidth; i++) {
+			if (fn[j * nPitch + i] == 0) {
+
+				cout << nSum << ":" << i << "," << j << endl;
+
+				nSum++;
+			}
+		}
+	}
+
+	//std::cout << nSum << std::endl;
+
+	m_pDlgImage->Invalidate();
+
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

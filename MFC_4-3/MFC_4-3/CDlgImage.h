@@ -12,7 +12,7 @@ public:
 	CDlgImage(CWnd* pParent = nullptr);   // 표준 생성자입니다.
 	virtual ~CDlgImage();
 
-
+	CImage m_image;
 	CWnd* m_pParent;
 
 // 대화 상자 데이터입니다.
@@ -27,4 +27,9 @@ protected:
 public:
 	afx_msg void OnBnClickedBtn1();
 	afx_msg void OnBnClickedButton2();
+	virtual BOOL OnInitDialog();
+//	afx_msg UINT OnNotifyFormat(CWnd* pWnd, UINT nCommand);
+	afx_msg void OnPaint();
+
+	void initImage();
 };

@@ -198,7 +198,8 @@ void CMFC43Dlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	delete m_pDlgImage;
+	if(m_pDlgImage) delete m_pDlgImage;
+	if(m_pDlgImageResult) delete m_pDlgImageResult;
 
 	
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
@@ -235,6 +236,8 @@ void CMFC43Dlg::OnBnClickedButton2()
 	int nHeight = m_pDlgImage->m_image.GetHeight();
 	int nPitch = m_pDlgImage->m_image.GetPitch();
 
+	memset(fn, 0xff, nWidth * nHeight);
+
 	//memset(fn, 0, 640 * 480);
 	//memset(fn, 0, 320 * 240);
 	for (int k = 0; k < 100; k++) {
@@ -247,15 +250,21 @@ void CMFC43Dlg::OnBnClickedButton2()
 
 	}
 
-	int nSum = 0;
+	int nIndex = 0;
 
 	for (int j = 0; j < nHeight; j++) {
 		for (int i = 0; i < nWidth; i++) {
 			if (fn[j * nPitch + i] == 0) {
+				if (m_pDlgImageResult->m_nDataCount <= 100) {
 
-				cout << nSum << ":" << i << "," << j << endl;
+					//cout << nSum << ":" << i << "," << j << endl;
 
-				nSum++;
+					//nSum++;
+
+					m_pDlgImageResult->m_ptData[nIndex].x = i;
+					m_pDlgImageResult->m_ptData[nIndex].y = j;
+					m_pDlgImageResult->m_nDataCount = ++nIndex;
+				}
 			}
 		}
 	}
@@ -263,6 +272,7 @@ void CMFC43Dlg::OnBnClickedButton2()
 	//std::cout << nSum << std::endl;
 
 	m_pDlgImage->Invalidate();
+	m_pDlgImageResult->Invalidate();
 
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

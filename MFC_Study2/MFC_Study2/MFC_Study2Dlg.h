@@ -44,4 +44,6 @@ public:
 	void moveRect();
 	afx_msg void OnBnClickedBtnAct();
 	void moveElipse();
+	bool initCircle(int i,int j,int nCenterX,int nCenterY,int nRadius);
+	void drawCircle(unsigned char* fn,int i,int j,int nRadius,int nGray);
 };

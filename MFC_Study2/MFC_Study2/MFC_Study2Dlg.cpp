@@ -267,34 +267,47 @@ void CMFCStudy2Dlg::moveRect()
 {
 	static int nSttx = 0;
 	static int nStty = 0;
-	int nGray = 30;
+	int nGray = 80;
 	int nWidth = m_image.GetWidth();
 	int nHeight = m_image.GetHeight();
 	int nPitch = m_image.GetPitch();
+	//int nRadius = 10;
+	int nRadius = 20;
 	unsigned char* fn = (unsigned char*)m_image.GetBits();
 
-	memset(fn, 0xff, nWidth*nHeight);
+	//memset(fn, 0xff, nWidth*nHeight);
 
-	for (int j = nStty; j < nStty+48; j++) {
+	drawCircle(fn, nSttx, nStty, nRadius, 0xff);
+
+	//nSttx++;
+
+	drawCircle(fn, ++nSttx, ++nStty, nRadius, nGray);
+
+	/*for (int j = nStty; j < nStty+48; j++) {
 		for (int i = nSttx; i < nSttx+64; i++) {
 			if(validImgPos(i,j))
 				fn[j * nPitch + i] = nGray;
 		}
-	}
+	}*/
 
-	nSttx++;
-	nStty++;
+	//nSttx++;
+	//nStty++;
 
 	UpdateDisplay();
 
+	CString strFile;
+	strFile.Format(_T("C:\\Users\\wjgk0\\source\\repos\\first_MFC\\MFC_Study2\\Image\\image%d.jpg"), nSttx);
+
+	m_image.Save(strFile);
 }
 
 void CMFCStudy2Dlg::OnBnClickedBtnAct()
 {
 
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 400; i++) {
 		//moveRect();
-		moveElipse();
+		//moveElipse();
+		moveRect();
 
 		Sleep(10);
 
@@ -366,4 +379,44 @@ void CMFCStudy2Dlg::moveElipse()
 	nStty++;
 
 	UpdateDisplay();
+}
+
+
+void CMFCStudy2Dlg::drawCircle(unsigned char* fn, int x, int y, int nRadius, int nGray)
+{
+
+	int nCenterX = x + nRadius;
+
+	int nCenterY = y + nRadius;
+
+	int nPitch = m_image.GetPitch();
+
+	for (int j = y; j < y + nRadius * 2; j++) {
+		for (int i = x; i < x + nRadius * 2; i++) {
+
+			if(initCircle(i,j,nCenterX,nCenterY,nRadius))
+			fn[j * nPitch + i] = nGray;
+		}
+	}
+
+}
+
+bool CMFCStudy2Dlg::initCircle(int i, int j, int nCenterX, int nCenterY, int nRadius)
+{
+	bool bRet = false;
+
+
+	double dx = i - nCenterX;
+	double dy = j - nCenterY;
+
+	double dDist = dx * dx + dy*dy;
+
+	if (dDist < nRadius*nRadius) {
+		bRet = true;
+
+
+	}
+
+
+	return bRet;
 }

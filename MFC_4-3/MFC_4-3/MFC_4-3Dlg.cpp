@@ -76,6 +76,8 @@ BEGIN_MESSAGE_MAP(CMFC43Dlg, CDialogEx)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(IDC_BUTTON2, &CMFC43Dlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMFC43Dlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BTN_MAKE_PATTERN, &CMFC43Dlg::OnBnClickedBtnMakePattern)
+	ON_BN_CLICKED(IDC_BTN_GET_DATA, &CMFC43Dlg::OnBnClickedBtnGetData)
 END_MESSAGE_MAP()
 
 
@@ -304,6 +306,95 @@ void CMFC43Dlg::OnBnClickedButton3()
 
 
 	cout << nRet <<"\t" <<millisec.count()<<"ms" << endl;
+
+
+
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CMFC43Dlg::OnBnClickedBtnMakePattern()
+{
+
+	unsigned char* fn = (unsigned char*)m_pDlgImage->m_image.GetBits();
+
+	int nWidth = m_pDlgImage->m_image.GetWidth();
+	int nHeight = m_pDlgImage->m_image.GetHeight();
+	int nPitch = m_pDlgImage->m_image.GetPitch();
+
+	//memset(fn, 0xff, nWidth * nHeight);
+	memset(fn, 0, nWidth * nHeight);
+
+	//CRect rect(100, 200, 150, 400);
+	CRect rect(100, 100, 200, 200);
+
+
+	//memset(fn, 0, 640 * 480);
+	//memset(fn, 0, 320 * 240);
+	for (int j = rect.top; j <rect.bottom; j++) {
+
+		for (int i = rect.left; i < rect.right; i++) {
+
+			fn[j * nPitch + i] = 0x81;//rand() % 0xff;//100;
+		}
+
+		/*int x = rand() % nWidth;
+		int y = rand() % nHeight;
+
+
+		fn[y * nPitch + x] = rand() % 0xff;*/
+
+	}
+
+	m_pDlgImage->Invalidate();
+
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CMFC43Dlg::OnBnClickedBtnGetData()
+{
+	unsigned char* fn = (unsigned char*)m_pDlgImage->m_image.GetBits();
+
+	int nWidth = m_pDlgImage->m_image.GetWidth();
+	int nHeight = m_pDlgImage->m_image.GetHeight();
+	int nPitch = m_pDlgImage->m_image.GetPitch();
+
+	int nTh = 0x80;
+
+
+
+	CRect rect(0, 0, nWidth, nHeight);
+
+	int nSumX = 0;
+	int nSumY = 0;
+	int nCount = 0;
+
+	for (int j = rect.top; j < rect.bottom; j++) {
+
+		for (int i = rect.left; i < rect.right; i++) {
+
+			//fn[j * nPitch + i] = rand() % 0xff;//100;
+			if (fn[j * nPitch + i] > nTh) {
+				nSumX += i;
+				nSumY += j;
+				nCount++;
+
+			}
+		}
+
+		/*int x = rand() % nWidth;
+		int y = rand() % nHeight;
+
+
+		fn[y * nPitch + x] = rand() % 0xff;*/
+
+	}
+
+	double dCenterX = (double)nSumX / nCount;
+	double dCenterY = (double)nSumY / nCount;
+
+	cout << dCenterX << "\t" << dCenterY << endl;
 
 
 

@@ -75,6 +75,7 @@ BEGIN_MESSAGE_MAP(CMFC43Dlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFC43Dlg::OnBnClickedButton1)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(IDC_BUTTON2, &CMFC43Dlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMFC43Dlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -278,6 +279,33 @@ void CMFC43Dlg::OnBnClickedButton2()
 
 	m_pDlgImage->Invalidate();
 	m_pDlgImageResult->Invalidate();
+
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+#include "CProcess.h"
+#include <chrono>
+void CMFC43Dlg::OnBnClickedButton3()
+{
+
+	CProcess process;
+
+	auto start = std::chrono::system_clock::now();
+
+
+
+	int nRet=process.getStartInfo(&m_pDlgImage->m_image,100);
+
+	auto end= std::chrono::system_clock::now();
+
+	auto millisec = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+
+
+	cout << nRet <<"\t" <<millisec.count()<<"ms" << endl;
+
+
 
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

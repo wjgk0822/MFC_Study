@@ -126,8 +126,8 @@ void CDlgImage::OnPaint()
 
 void CDlgImage::initImage()
 {
-	int nWidth = 640;
-	int nHeight = 480;
+	int nWidth = 4096 * 5;//640;
+	int nHeight = 4096 * 5;//480;
 	int nBpp = 8;
 
 

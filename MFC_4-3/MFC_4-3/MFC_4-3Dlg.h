@@ -43,4 +43,5 @@ public:
 
 	void callFunc(int n);
 	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedButton3();
 };

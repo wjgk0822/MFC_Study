@@ -335,7 +335,7 @@ void CMFC43Dlg::OnBnClickedBtnMakePattern()
 	int nRadius = 20;*/
 
 	//memset(fn, 0xff, nWidth * nHeight);
-	memset(fn, 0xff, nWidth * nHeight);
+	memset(fn, 0, nWidth * nHeight);
 
 	//CDC* pDc = GetDC();
 
@@ -351,7 +351,7 @@ void CMFC43Dlg::OnBnClickedBtnMakePattern()
 
 	int centerY = (circle.top + circle.bottom) / 2; // 원의 중심 Y 좌표
 
-	int radius = 10;
+	int radius = 20;
 
 	int yellow = 0xE0;
 
@@ -360,7 +360,7 @@ void CMFC43Dlg::OnBnClickedBtnMakePattern()
 		for (int i = centerX - radius; i <= centerX + radius; i++) {
 			// 원의 중심에서 반지름 이내의 픽셀만 색칠
 			if ((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY) <= radius * radius) {
-				fn[j * nPitch + i] = 0x81; // 특정 색상 (여기서는 중간 회색)
+				fn[j * nPitch + i] = 0xff; // 특정 색상 (여기서는 중간 회색)
 
 
 			}
@@ -403,14 +403,15 @@ void CMFC43Dlg::OnBnClickedBtnMakePattern()
 	for (int j = centerY - radius; j <= centerY + radius; j++) {
 		for (int i = centerX - radius; i <= centerX + radius; i++) {
 			// 원 내부의 픽셀만 고려
-			if (((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY) <= radius * radius)) {
+			if (!((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY) <= radius * radius)) {
 
+				//fn[j * nPitch + i] = 200;
 
 				for (int k = 0; k < numEC; k++)
 				{
 
-					int x = rand() % 300;
-					int y = rand() % 300;
+					int x = rand() % nWidth;
+					int y = rand() % nHeight;
 
 					fn[y * nPitch + x] = yellow;
 				}
@@ -447,104 +448,6 @@ void CMFC43Dlg::OnBnClickedBtnMakePattern()
 			}
 		}
 	}
-
-	//count = numEC;
-	//for (int j = centerY - radius; j <= centerY + radius; j++) {
-	//	for (int i = centerX - radius; i <= centerX + radius; i++) {
-
-
-	//		if (((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY) <= radius * radius)) {
-
-
-	//			//radius = 50;
-
-	//			for (int k = 0; k < numEC; k++)
-	//			{
-	//				int x = rand() % 300;
-
-	//				int y = rand() % 300;
-
-	//				fn[y * nPitch + x] = 200;
-	//			}
-
-	//			//fn[j * nPitch + i] = yellow;
-
-
-	//			/*if (fn[j * nPitch + i] > nTh) {
-	//				nSumX += i;
-	//				nSumY += j;
-	//				nCount++;
-	//			}*/
-	//		}
-
-	//		//for (int k = 0; k < numEC; k++) {
-
-	//		//	int x = rand() % 300;
-	//		//	int y = rand() % 300;
-
-	//		//	fn[y * nPitch + i] = yellow;
-	//		//}
-	//		// 원의 중심에서 반지름 이내의 픽셀만 색칠
-	//		//if (((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY) > radius * radius)) {
-
-	//		//	//for (int k = 0; k < numEC; k++) {
-
-	//		//	//	int x = rand() % 300;
-	//		//	//	int y = rand() % 300;
-	//		//	//	//fn[j * nPitch + i] = 0x81; // 특정 색상 (여기서는 중간 회색)
-
-	//		//	//	fn[y * nPitch + x] = yellow;
-	//		//	//}
-
-
-	//		//}
-	//	}
-	//}
-	
-
-	
-
-
-	//for (int j = centerY - radius; j <= centerY + radius; j++) {
-	//	for (int i = centerX - radius; i <= centerX + radius; i++) {
-
-
-
-	//		for (int k = 0; k < numEC; k++)
-	//		{
-	//			if ((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY) > radius * radius) {
-
-	//				int randX = centerX + (rand() % (2 * radius) - radius);
-	//				int randY = centerY + (rand() % (2 * radius) - radius);
-
-	//				fn[randY * nPitch + randX] = yellow;
-	//			}
-
-	//		}
-
-
-
-
-
-	//		//if ((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY) > radius * radius) {
-
-	//		//	for (int k = 0; k < numEC; k++) {
-
-	//		//		int randX = centerX + (rand() % (2 * radius) - radius);
-	//		//		int randY = centerY + (rand() % (2 * radius) - radius);
-
-	//		//		fn[randY * nPitch + randX] = yellow;
-	//			}
-	//			//fn[j * nPitch + i] = yellow; // 원 외부 픽셀에 노란색 동그라미 그리기
-
-	//	
-	//		// 원 내부의 픽셀만 고려
-	///*		if ((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY) <= radius * radius) {
-	//			if (fn[j * nPitch + i] > nTh) {
-	//				nSumX += i;
-	//				nSumY += j;
-	//				nCount++;*/
-	//			}
 
 	m_pDlgImage->Invalidate();
 	m_pDlgImageResult->Invalidate();

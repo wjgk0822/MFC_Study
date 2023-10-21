@@ -166,7 +166,7 @@ void CDlgImage::drawData(CDC* pDC)
 	for (int i = 0; i < m_nDataCount; i++) {
 		rect.SetRect(m_ptData[i],m_ptData[i]);
 
-		rect.InflateRect(2, 2);
+		rect.InflateRect(20, 20);
 
 		pDC->Ellipse(rect);
 	}

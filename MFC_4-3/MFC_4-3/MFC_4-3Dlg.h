@@ -49,4 +49,5 @@ public:
 
 	void drawCircle(unsigned char* fn, int i, int j, int nRadius, int nGray);
 	bool initCircle(int i, int j, int nCenterX, int nCenterY, int nRadius);
+
 };

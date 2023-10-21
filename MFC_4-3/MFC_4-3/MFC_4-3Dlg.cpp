@@ -373,6 +373,8 @@ void CMFC43Dlg::OnBnClickedBtnMakePattern()
 
 	int nTh = 0x80;
 
+	int cCount = 0;
+
 	// 원 내부의 픽셀만 무게 중심을 계산
 	for (int j = centerY - radius; j <= centerY + radius; j++) {
 		for (int i = centerX - radius; i <= centerX + radius; i++) {
@@ -396,25 +398,67 @@ void CMFC43Dlg::OnBnClickedBtnMakePattern()
 
 	int nIndex = 0;
 
+	nCount = 149;
+
 	//nTh = 100;
 
 	//radius = 10;
 
 	for (int j = centerY - radius; j <= centerY + radius; j++) {
 		for (int i = centerX - radius; i <= centerX + radius; i++) {
+
+			//cCount++;
 			// 원 내부의 픽셀만 고려
 			if (!((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY) <= radius * radius)) {
 
-				//fn[j * nPitch + i] = 200;
+				if (cCount != numEC) {
+					cCount++;
+				}
 
-				for (int k = 0; k < numEC; k++)
+				//cCount=150;
+
+				if (cCount == numEC)
 				{
 
-					int x = rand() % nWidth;
-					int y = rand() % nHeight;
+					for (int k = 0; k < cCount; k++) {
 
-					fn[y * nPitch + x] = yellow;
+						int x = rand() % nWidth;
+						int y = rand() % nHeight;
+
+						fn[y * nPitch + x] = yellow;
+
+						if (cCount == k+1) {
+
+							nCount = 150;
+
+							//break;
+						}
+					}
 				}
+
+				//fn[j * nPitch + i] = 200;
+
+				//for (int k = 0; k < numEC; k++)
+				//{
+
+				//	int x = rand() % nWidth;
+				//	int y = rand() % nHeight;
+
+				//	fn[y * nPitch + x] = yellow;
+
+				//	cCount++;
+
+				//	if (cCount == nCount)
+				//	{
+				//		nCount = 150;
+
+
+				//	}
+
+				//	//cCount++;
+
+
+				//}
 
 
 				//if (fn[j * nPitch + i] > nTh) {
@@ -424,7 +468,11 @@ void CMFC43Dlg::OnBnClickedBtnMakePattern()
 				}
 			}
 		}
+
+	//cout << cCount << endl;
 	//}
+
+	cout << nCount << endl;
 
 
 
@@ -697,3 +745,5 @@ bool CMFC43Dlg::initCircle(int i, int j, int nCenterX, int nCenterY, int nRadius
 
 
 }
+
+
